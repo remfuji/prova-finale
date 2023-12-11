@@ -14,10 +14,17 @@ mongoose.connect(dbURI)
   })
   .catch((err) => console.error(err));
 
-const userSchema = new mongoose.Schema({
-  username: String,
-  password: String,
-});
+  const userSchema = new mongoose.Schema({
+    username: String,
+    password: String,
+    segnalazioni: [{ 
+      nome: String,
+      tipologia: String,
+      descrizione: String,
+    }],
+  });
+  
+  
 
 const User = mongoose.model('User', userSchema);
 
@@ -99,4 +106,36 @@ app.get('/get-user-details', async (req, res) => {
     res.status(500).json({ message: 'Errore durante il recupero dei dettagli dell\'utente. Si prega di riprovare più tardi.' });
   }
 });
+app.post('/insert-segnalazione', async (req, res) => {
+  const { username, nome, tipologia, descrizione } = req.body;
+
+  try {
+    // Cerca l'utente nel database MongoDB
+    const user = await User.findOne({ username });
+
+    if (user) {
+      // Crea una nuova segnalazione
+      const newSegnalazione = {
+        nome,
+        tipologia,
+        descrizione,
+      };
+
+      // Aggiungi la nuova segnalazione all'array segnalazioni dell'utente
+      user.segnalazioni.push(newSegnalazione);
+      await user.save();
+
+      res.status(200).json({ message: 'Segnalazione inserita con successo e associata all\'utente' });
+    } else {
+      // Utente non trovato
+      res.status(404).json({ message: 'Utente non trovato' });
+    }
+  } catch (error) {
+    console.error('Errore durante l\'inserimento della segnalazione:', error);
+    res.status(500).json({ message: 'Errore durante l\'inserimento della segnalazione. Si prega di riprovare più tardi.' });
+  }
+});
+
+
+
 
