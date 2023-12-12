@@ -32,11 +32,12 @@ function Login() {
         },
         body: JSON.stringify({ username, password }),
       });
-
+  
       const data = await response.json();
-
+  
       if (response.status === 200) {
         localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('username', username); // Salva l'username nel localStorage
         navigate('/user-dashboard'); // Redirect after successful login
       } else {
         setLoginError(data.message || 'Login failed');
@@ -45,11 +46,14 @@ function Login() {
       setLoginError('Network error. Please try again later.');
     }
   };
+  
 
   const handleLogout = () => {
     localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('username'); // Rimuove anche l'username dal localStorage
     navigate('/login'); // Redirect to login page after logout
   };
+  
 
   return (
     <div>

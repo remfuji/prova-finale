@@ -1,10 +1,41 @@
+import React, { useState, useEffect } from 'react';
+
 function Segnalazioni() {
-    return (
-      <div>
-        {/* Contenuto del tuo componente di accesso */}
-        <h2>Segnalazioni</h2>
-      </div>
-    );
-  }
-  
-  export default Segnalazioni;
+  const [segnalazioni, setSegnalazioni] = useState([]);
+
+  useEffect(() => {
+    async function fetchSegnalazioni() {
+      try {
+        const response = await fetch('http://localhost:3001/all-segnalazioni'); // Sostituisci con il tuo URL effettivo
+        if (response.ok) {
+          const data = await response.json();
+          setSegnalazioni(data.segnalazioni);
+        } else {
+          console.error('Errore nella risposta del server:', response.status);
+        }
+      } catch (error) {
+        console.error('Errore durante il fetch delle segnalazioni:', error);
+      }
+    }
+
+    fetchSegnalazioni();
+  }, []);
+
+  return (
+    <div>
+      <h2>Segnalazioni</h2>
+      <ul>
+        {segnalazioni.map((segnalazione, index) => (
+          <li key={index}>
+            <strong>Nome:</strong> {segnalazione.nome}<br />
+            <strong>Tipologia:</strong> {segnalazione.tipologia}<br />
+            <strong>Descrizione:</strong> {segnalazione.descrizione}<br />
+            <hr />
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default Segnalazioni;

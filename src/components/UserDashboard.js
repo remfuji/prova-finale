@@ -13,22 +13,24 @@ function App() {
 
 
   useEffect(() => {
-    // Check if the user is logged in
     const isLoggedIn = localStorage.getItem('isLoggedIn');
     if (!isLoggedIn) {
-      navigate('/login'); // Redirect to login if not logged in
+      navigate('/login');
     } else {
-      // If logged in, set the username (adjust this logic as per your application's design)
-      // For example, you might want to retrieve the username from local storage
-      const storedUsername = localStorage.getItem('username'); // Assuming you store username in local storage on successful login
-      setUsername(storedUsername);
-      localStorage.setItem('username', username)
+      const storedUsername = localStorage.getItem('username'); 
+      if (storedUsername) {
+        setUsername(storedUsername);
+        fetchSegnalazioni(storedUsername);
+      } else {
+        console.error('Username non trovato nel localStorage');
+      }
     }
   }, [navigate]);
+  
 
   const handleInsertSegnalazione = async () => {
     try {
-      // Chiamata API per inserire la segnalazione
+     
       const response = await axios.post('http://localhost:3001/insert-segnalazione', {
         username,
         nome,
@@ -46,13 +48,23 @@ function App() {
     }
   };
   
+  const fetchSegnalazioni = async (username) => {
+    try {
+      const response = await axios.get(`http://localhost:3001/get-segnalazioni?username=${username}`);
+      if (response.status === 200) {
+        setSegnalazioni(response.data.segnalazioni);
+      }
+    } catch (error) {
+      console.error('Errore durante il recupero delle segnalazioni:', error);
+    }
+  };
+
 
 
 
 const handleLogout = () => {
-    // Aggiorna lo stato del token quando l'utente esegue il logout
     localStorage.removeItem('isLoggedIn');
-    navigate('/login'); // Reindirizza all'area di login dopo il logout
+    navigate('/login');
   };
 
   return (
@@ -61,11 +73,7 @@ const handleLogout = () => {
       <h1>Inserisci una nuova segnalazione</h1>
       <p>Logged in as: {username}</p> 
       <button onClick={handleLogout}>Logout</button>
-      <label>
-        Username:
-        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
-      </label>
-      <br />
+      
       <label>
         Titolo:
         <input type="text" value={nome} onChange={(e) => setNome(e.target.value)} />

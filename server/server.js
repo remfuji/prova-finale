@@ -136,6 +136,44 @@ app.post('/insert-segnalazione', async (req, res) => {
   }
 });
 
+app.get('/get-segnalazioni', async (req, res) => {
+  const { username } = req.query;
+  console.log('Username ricevuto:', username);
+
+  try {
+    const user = await User.findOne({ username });
+    if (user) {
+      res.status(200).json({ segnalazioni: user.segnalazioni });
+    } else {
+      res.status(404).json({ message: 'Utente non trovato' });
+    }
+  } catch (error) {
+    console.error('Errore durante il recupero delle segnalazioni:', error);
+    res.status(500).json({ message: 'Errore durante il recupero delle segnalazioni. Si prega di riprovare più tardi.' });
+  }
+});
+app.get('/all-segnalazioni', async (req, res) => {
+  try {
+    // Cerca tutti gli utenti e restituisci solo le loro segnalazioni
+    const users = await User.find().select('segnalazioni -_id');
+    let allSegnalazioni = [];
+
+    // Estrai tutte le segnalazioni da ogni utente
+    users.forEach(user => {
+      allSegnalazioni = allSegnalazioni.concat(user.segnalazioni);
+    });
+
+    res.status(200).json({ segnalazioni: allSegnalazioni });
+  } catch (error) {
+    console.error('Errore durante il recupero delle segnalazioni:', error);
+    res.status(500).json({ message: 'Errore durante il recupero delle segnalazioni. Si prega di riprovare più tardi.' });
+  }
+});
+
+// ... (resto del codice del server)
+
+
+
 
 
 
