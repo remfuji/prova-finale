@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Login from './Login';
+
+import { useNavigate } from 'react-router-dom';
 
 function App() {
   const [username, setUsername] = useState('');
@@ -8,6 +9,22 @@ function App() {
   const [tipologia, setTipologia] = useState('');
   const [descrizione, setDescrizione] = useState('');
   const [segnalazioni, setSegnalazioni] = useState([]);
+  const navigate = useNavigate();
+
+
+  useEffect(() => {
+    // Check if the user is logged in
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
+    if (!isLoggedIn) {
+      navigate('/login'); // Redirect to login if not logged in
+    } else {
+      // If logged in, set the username (adjust this logic as per your application's design)
+      // For example, you might want to retrieve the username from local storage
+      const storedUsername = localStorage.getItem('username'); // Assuming you store username in local storage on successful login
+      setUsername(storedUsername);
+      localStorage.setItem('username', username)
+    }
+  }, [navigate]);
 
   const handleInsertSegnalazione = async () => {
     try {
@@ -28,23 +45,22 @@ function App() {
       console.error('Errore durante la chiamata API:', error);
     }
   };
-  const [token, setToken] = useState(null);
+  
 
-  const handleLogin = (userToken) => {
-    // La funzione viene chiamata dal componente LoginForm
-    // userToken è il token JWT restituito dal server durante il login
-    setToken(userToken);
-  };
 
-  const handleLogout = () => {
+
+const handleLogout = () => {
     // Aggiorna lo stato del token quando l'utente esegue il logout
-    setToken(null);
+    localStorage.removeItem('isLoggedIn');
+    navigate('/login'); // Reindirizza all'area di login dopo il logout
   };
 
   return (
     <div>
      
       <h1>Inserisci una nuova segnalazione</h1>
+      <p>Logged in as: {username}</p> 
+      <button onClick={handleLogout}>Logout</button>
       <label>
         Username:
         <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />

@@ -8,13 +8,13 @@ import Contatti from "../components/Contatti";
 import Statistiche from "../components/Statistiche";
 import Segnalazioni from "../components/Segnalazioni";
 import UserDashboard from "../components/UserDashboard";
-import { AuthProvider } from '../components/AuthContext';
+
 import "../App.css";
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 function HomePage() {
   return (
-    <AuthProvider>
+    
     <Router>
       
       <div className="app-container">
@@ -37,7 +37,7 @@ function HomePage() {
       </div>
       
     </Router>
-    </AuthProvider>
+  
     
   );
 }
