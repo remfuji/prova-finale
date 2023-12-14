@@ -57,5 +57,42 @@ nav ul li{
 form, button, p, input{
   font-weight: bold;
 }
+.login-form{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-top: 20px;
+  
+}
+.login-form input{
+  margin-bottom: 10px;
+  height: 30px;
+}
+
+a {
+  color: #4b527b;
+  position: relative;
+  text-decoration: none;
+}
+
+a::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  border-radius: 4px;
+  background-color: #4b527b;
+  bottom: 0;
+  left: 0;
+  transform-origin: right;
+  transform: scaleX(0);
+  transition: transform .3s ease-in-out;
+}
+
+a:hover::before {
+  transform-origin: left;
+  transform: scaleX(1);
+}
 
 

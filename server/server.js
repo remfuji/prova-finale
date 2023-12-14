@@ -78,7 +78,7 @@ app.post('/login', async (req, res) => {
     if (user) {
       res.status(200).json({ message: 'Login avvenuto con successo!' });
     } else {
-      res.status(401).json({ message: 'Credenziali non valide. Il login ha fallito.' });
+      res.status(401).json({ message: 'Credenziali non valide.' });
     }
   } catch (error) {
     console.error('Errore durante il login:', error);

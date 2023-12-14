@@ -6,9 +6,9 @@ function Login() {
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');
   const navigate = useNavigate();
-
+  const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
   useEffect(() => {
-    const isLoggedIn = localStorage.getItem('isLoggedIn');
+ 
     if (isLoggedIn) {
       navigate('/user-dashboard'); 
     }
@@ -51,29 +51,29 @@ function Login() {
   const handleLogout = () => {
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('username');
-    navigate('/login'); 
+    navigate('/login');
   };
   
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form className='login-form' onSubmit={handleSubmit}>
         <input
           type="text"
           value={username}
           onChange={handleUsernameChange}
-          placeholder="Username"
+          placeholder="Mario"
         />
         <input
           type="password"
           value={password}
           onChange={handlePasswordChange}
-          placeholder="Password"
+          placeholder="********"
         />
         <button type="submit">Login</button>
       </form>
       {loginError && <p>{loginError}</p>}
-      <button onClick={handleLogout}>Logout</button>
+      {isLoggedIn && <button onClick={handleLogout}>Logout</button>}
     </div>
   );
 }

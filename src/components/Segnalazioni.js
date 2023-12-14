@@ -6,7 +6,7 @@ function Segnalazioni() {
   useEffect(() => {
     async function fetchSegnalazioni() {
       try {
-        const response = await fetch('http://localhost:3001/all-segnalazioni'); // Sostituisci con il tuo URL effettivo
+        const response = await fetch('http://localhost:3001/all-segnalazioni'); 
         if (response.ok) {
           const data = await response.json();
           setSegnalazioni(data.segnalazioni);

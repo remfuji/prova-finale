@@ -31,7 +31,6 @@ function App() {
     }
   }, [navigate]);
 
-
   const handleInsertSegnalazione = async () => {
     try {
       if (!nome || !tipologia || !descrizione) {
@@ -72,15 +71,15 @@ function App() {
     setEditedTipologia(segnalazione.tipologia);
     setEditedDescrizione(segnalazione.descrizione);
   };
+
   const handleDeleteSegnalazione = async (segnalazioneId) => {
     try {
-      // Effettua una richiesta DELETE al server
+      
       const response = await axios.delete(`http://localhost:3001/delete-segnalazione/${segnalazioneId}`);
   
       if (response.status === 200) {
         console.log('Segnalazione cancellata con successo');
   
-        // Aggiorna lo stato per rimuovere la segnalazione cancellata dalla lista
         setSegnalazioni(segnalazioni.filter(segnalazione => segnalazione._id !== segnalazioneId));
       } else {
         console.log('Errore durante la cancellazione della segnalazione');
@@ -91,13 +90,12 @@ function App() {
   };
   const handleSaveEdit = async () => {
     try {
-      // Verifica se tutti i campi sono stati riempiti
+     
       if (!editedNome || !editedTipologia || !editedDescrizione) {
         alert("Per favore, riempi tutti i campi prima di salvare le modifiche.");
         return;
       }
   
-      // Effettua una richiesta PUT al server con i nuovi dati della segnalazione
       const response = await axios.put(`http://localhost:3001/update-segnalazione/${editingSegnalazione}`, {
         nome: editedNome,
         tipologia: editedTipologia,
@@ -107,15 +105,13 @@ function App() {
       if (response.status === 200) {
         console.log('Segnalazione aggiornata con successo');
   
-        // Aggiorna lo stato per riflettere le modifiche nella UI
         setSegnalazioni(segnalazioni.map(segnalazione => {
           if (segnalazione._id === editingSegnalazione) {
             return { ...segnalazione, nome: editedNome, tipologia: editedTipologia, descrizione: editedDescrizione };
           }
           return segnalazione;
         }));
-  
-        // Reset dello stato di editing
+
         setEditingSegnalazione(null);
         setEditedNome('');
         setEditedTipologia('');
@@ -128,10 +124,6 @@ function App() {
     }
   };
   
-
-
-
-
   const handleLogout = () => {
     localStorage.removeItem('isLoggedIn');
     navigate('/login');

@@ -22,7 +22,7 @@ function Sidebar({ userLoggedIn }) {
           <li><Link to="/segnalazioni">Segnalazioni</Link></li>
           <li><Link to="/statistiche">Statistiche</Link></li>
           <li><Link to="/contatti">Contatti</Link></li>
-          {isLoggedIn && <li><Link to="/user-dashboard">UserDashboard</Link></li>}
+          <li><Link to="/user-dashboard">User Dashboard</Link></li>
         </ul>
       </nav>
     </aside>
