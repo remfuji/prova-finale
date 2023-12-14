@@ -1,9 +1,17 @@
 import '../App.css';
+
 import { Link } from 'react-router-dom';
+import { useState, useEffect} from 'react';
+import useLocalStorageListener from './useLocalStorageListener';
 
-// ... Altro codice
+function Sidebar({ userLoggedIn }) {
+  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('isLoggedIn') === 'true');
 
-function Sidebar() {
+  useLocalStorageListener(setIsLoggedIn);
+
+  useEffect(() => {
+    setIsLoggedIn(localStorage.getItem('isLoggedIn') === 'true');
+  }, [isLoggedIn]); // Added isLoggedIn as a dependency
   return (
     <aside>
       <nav>
@@ -14,12 +22,11 @@ function Sidebar() {
           <li><Link to="/segnalazioni">Segnalazioni</Link></li>
           <li><Link to="/statistiche">Statistiche</Link></li>
           <li><Link to="/contatti">Contatti</Link></li>
+          {isLoggedIn && <li><Link to="/user-dashboard">UserDashboard</Link></li>}
         </ul>
       </nav>
     </aside>
   );
 }
 
-// ... Altro codice
-
-  export default Sidebar;
+export default Sidebar;

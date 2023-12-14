@@ -10,7 +10,7 @@ function Login() {
   useEffect(() => {
     const isLoggedIn = localStorage.getItem('isLoggedIn');
     if (isLoggedIn) {
-      navigate('/user-dashboard'); // Replace with your dashboard path
+      navigate('/user-dashboard'); 
     }
   }, [navigate]);
 
@@ -37,8 +37,8 @@ function Login() {
   
       if (response.status === 200) {
         localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('username', username); // Salva l'username nel localStorage
-        navigate('/user-dashboard'); // Redirect after successful login
+        localStorage.setItem('username', username); 
+        navigate('/user-dashboard');
       } else {
         setLoginError(data.message || 'Login failed');
       }
@@ -50,8 +50,8 @@ function Login() {
 
   const handleLogout = () => {
     localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('username'); // Rimuove anche l'username dal localStorage
-    navigate('/login'); // Redirect to login page after logout
+    localStorage.removeItem('username');
+    navigate('/login'); 
   };
   
 

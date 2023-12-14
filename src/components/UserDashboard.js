@@ -9,6 +9,10 @@ function App() {
   const [tipologia, setTipologia] = useState('');
   const [descrizione, setDescrizione] = useState('');
   const [segnalazioni, setSegnalazioni] = useState([]);
+  const [editingSegnalazione, setEditingSegnalazione] = useState(null);
+  const [editedNome, setEditedNome] = useState('');
+  const [editedTipologia, setEditedTipologia] = useState('');
+  const [editedDescrizione, setEditedDescrizione] = useState('');
   const navigate = useNavigate();
 
 
@@ -17,7 +21,7 @@ function App() {
     if (!isLoggedIn) {
       navigate('/login');
     } else {
-      const storedUsername = localStorage.getItem('username'); 
+      const storedUsername = localStorage.getItem('username');
       if (storedUsername) {
         setUsername(storedUsername);
         fetchSegnalazioni(storedUsername);
@@ -26,11 +30,14 @@ function App() {
       }
     }
   }, [navigate]);
-  
+
 
   const handleInsertSegnalazione = async () => {
     try {
-     
+      if (!nome || !tipologia || !descrizione) {
+        alert("Per favore, riempi tutti i campi prima di inserire la segnalazione.");
+        return;
+      }
       const response = await axios.post('http://localhost:3001/insert-segnalazione', {
         username,
         nome,
@@ -40,6 +47,7 @@ function App() {
 
       if (response.status === 200) {
         console.log('Segnalazione inserita con successo!');
+        setSegnalazioni(segnalazioni);
       } else {
         console.log('Errore durante l\'inserimento della segnalazione.');
       }
@@ -47,7 +55,7 @@ function App() {
       console.error('Errore durante la chiamata API:', error);
     }
   };
-  
+
   const fetchSegnalazioni = async (username) => {
     try {
       const response = await axios.get(`http://localhost:3001/get-segnalazioni?username=${username}`);
@@ -58,26 +66,89 @@ function App() {
       console.error('Errore durante il recupero delle segnalazioni:', error);
     }
   };
+  const handleEditSegnalazione = (segnalazione) => {
+    setEditingSegnalazione(segnalazione._id);
+    setEditedNome(segnalazione.nome);
+    setEditedTipologia(segnalazione.tipologia);
+    setEditedDescrizione(segnalazione.descrizione);
+  };
+  const handleDeleteSegnalazione = async (segnalazioneId) => {
+    try {
+      // Effettua una richiesta DELETE al server
+      const response = await axios.delete(`http://localhost:3001/delete-segnalazione/${segnalazioneId}`);
+  
+      if (response.status === 200) {
+        console.log('Segnalazione cancellata con successo');
+  
+        // Aggiorna lo stato per rimuovere la segnalazione cancellata dalla lista
+        setSegnalazioni(segnalazioni.filter(segnalazione => segnalazione._id !== segnalazioneId));
+      } else {
+        console.log('Errore durante la cancellazione della segnalazione');
+      }
+    } catch (error) {
+      console.error('Errore durante la cancellazione della segnalazione:', error);
+    }
+  };
+  const handleSaveEdit = async () => {
+    try {
+      // Verifica se tutti i campi sono stati riempiti
+      if (!editedNome || !editedTipologia || !editedDescrizione) {
+        alert("Per favore, riempi tutti i campi prima di salvare le modifiche.");
+        return;
+      }
+  
+      // Effettua una richiesta PUT al server con i nuovi dati della segnalazione
+      const response = await axios.put(`http://localhost:3001/update-segnalazione/${editingSegnalazione}`, {
+        nome: editedNome,
+        tipologia: editedTipologia,
+        descrizione: editedDescrizione
+      });
+  
+      if (response.status === 200) {
+        console.log('Segnalazione aggiornata con successo');
+  
+        // Aggiorna lo stato per riflettere le modifiche nella UI
+        setSegnalazioni(segnalazioni.map(segnalazione => {
+          if (segnalazione._id === editingSegnalazione) {
+            return { ...segnalazione, nome: editedNome, tipologia: editedTipologia, descrizione: editedDescrizione };
+          }
+          return segnalazione;
+        }));
+  
+        // Reset dello stato di editing
+        setEditingSegnalazione(null);
+        setEditedNome('');
+        setEditedTipologia('');
+        setEditedDescrizione('');
+      } else {
+        console.log('Errore durante l\'aggiornamento della segnalazione');
+      }
+    } catch (error) {
+      console.error('Errore durante l\'aggiornamento della segnalazione:', error);
+    }
+  };
+  
 
 
 
 
-const handleLogout = () => {
+  const handleLogout = () => {
     localStorage.removeItem('isLoggedIn');
     navigate('/login');
   };
 
   return (
     <div>
-     
-      <h1>Inserisci una nuova segnalazione</h1>
-      <p>Logged in as: {username}</p> 
+
+      <h3>Inserisci una nuova segnalazione</h3>
+   
       <button onClick={handleLogout}>Logout</button>
-      
+      <div>
       <label>
         Titolo:
-        <input type="text" value={nome} onChange={(e) => setNome(e.target.value)} />
       </label>
+      <input type="text" value={nome} onChange={(e) => setNome(e.target.value)} />
+
       <br />
       <label>
         Tipologia:
@@ -90,19 +161,55 @@ const handleLogout = () => {
       </label>
       <br />
       <button onClick={handleInsertSegnalazione}>Inserisci Segnalazione</button>
+      </div>
       <div>
-      <h1>Segnalazioni dell'utente {username}</h1>
-      <ul>
+        <h1>Segnalazioni dell'utente {username}</h1>
+        <ul>
         {segnalazioni.map((segnalazione, index) => (
-          <li key={index}>
-            <strong>Nome:</strong> {segnalazione.nome} <br />
-            <strong>Tipologia:</strong> {segnalazione.tipologia} <br />
-            <strong>Descrizione:</strong> {segnalazione.descrizione} <br />
-            <hr />
-          </li>
-        ))}
-      </ul>
-    </div>
+  <li key={index}>
+    <strong>Nome:</strong> {segnalazione.nome} <br />
+    <strong>Tipologia:</strong> {segnalazione.tipologia} <br />
+    <strong>Descrizione:</strong> {segnalazione.descrizione} <br />
+    <button onClick={() => handleDeleteSegnalazione(segnalazione._id)}>Cancella</button>
+    <button onClick={() => handleEditSegnalazione(segnalazione)}>Modifica</button>
+    {editingSegnalazione === segnalazione._id && (
+  <div>
+    <label>
+      Titolo:
+      <input
+        type="text"
+        value={editedNome}
+        onChange={(e) => setEditedNome(e.target.value)}
+      />
+    </label>
+    <br />
+    <label>
+      Tipologia:
+      <input
+        type="text"
+        value={editedTipologia}
+        onChange={(e) => setEditedTipologia(e.target.value)}
+      />
+    </label>
+    <br />
+    <label>
+      Descrizione:
+      <textarea
+        value={editedDescrizione}
+        onChange={(e) => setEditedDescrizione(e.target.value)}
+      />
+    </label>
+    <br />
+    <button onClick={handleSaveEdit}>Salva Modifiche</button>
+    <button onClick={() => setEditingSegnalazione(null)}>Annulla</button>
+  </div>
+)}
+
+    <hr />
+  </li>
+))}
+        </ul>
+      </div>
     </div>
   );
 }

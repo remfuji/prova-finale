@@ -13,6 +13,7 @@ import "../App.css";
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 function HomePage() {
+
   return (
     
     <Router>
@@ -20,7 +21,7 @@ function HomePage() {
       <div className="app-container">
         <Header />
         <div className="app-body">
-          <Sidebar />
+          <Sidebar/>
           <Routes>
           
             <Route path="/" element={<Main />} />

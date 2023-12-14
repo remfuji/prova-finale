@@ -170,7 +170,43 @@ app.get('/all-segnalazioni', async (req, res) => {
   }
 });
 
-// ... (resto del codice del server)
+app.delete('/delete-segnalazione/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await User.updateOne(
+      {},
+      { $pull: { segnalazioni: { _id: id } } },
+      { multi: true }
+    );
+    res.status(200).json({ message: 'Segnalazione cancellata con successo' });
+  } catch (error) {
+    console.error('Errore durante la cancellazione della segnalazione:', error);
+    res.status(500).json({ message: 'Errore durante la cancellazione della segnalazione.' });
+  }
+});
+app.put('/update-segnalazione/:id', async (req, res) => {
+  const { id } = req.params;
+  const { nome, tipologia, descrizione } = req.body;
+
+  try {
+    await User.updateOne(
+      { "segnalazioni._id": id },
+      { 
+        "$set": {
+          "segnalazioni.$.nome": nome,
+          "segnalazioni.$.tipologia": tipologia,
+          "segnalazioni.$.descrizione": descrizione
+        }
+      }
+    );
+    res.status(200).json({ message: 'Segnalazione aggiornata con successo' });
+  } catch (error) {
+    console.error('Errore durante l\'aggiornamento della segnalazione:', error);
+    res.status(500).json({ message: 'Errore durante l\'aggiornamento della segnalazione.' });
+  }
+});
+
 
 
 
