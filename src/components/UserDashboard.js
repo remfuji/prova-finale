@@ -130,79 +130,79 @@ function App() {
   };
 
   return (
-    <div>
-
-      <h3>Inserisci una nuova segnalazione</h3>
+    <div class="container">
+      <div className='head-info'>
+      <h2>Benvenuto {username}</h2>	
+    <button class="logout-btn" onClick={handleLogout}>Logout</button>
+      </div>
    
-      <button onClick={handleLogout}>Logout</button>
-      <div>
-      <label>
-        Titolo:
-      </label>
-      <input type="text" value={nome} onChange={(e) => setNome(e.target.value)} />
+    <h3>Inserisci una nuova segnalazione</h3>
+ 
+   
+    
+    <div class="form-group">
+        <label>
+            Titolo:
+            <input type="text" class="input-field" value={nome} onChange={(e) => setNome(e.target.value)} />
+        </label>
 
-      <br />
-      <label>
-        Tipologia:
-        <input type="text" value={tipologia} onChange={(e) => setTipologia(e.target.value)} />
-      </label>
-      <br />
-      <label>
-        Descrizione:
-        <textarea value={descrizione} onChange={(e) => setDescrizione(e.target.value)} />
-      </label>
-      <br />
-      <button onClick={handleInsertSegnalazione}>Inserisci Segnalazione</button>
-      </div>
-      <div>
-        <h1>Segnalazioni dell'utente {username}</h1>
-        <ul>
-        {segnalazioni.map((segnalazione, index) => (
-  <li key={index}>
-    <strong>Nome:</strong> {segnalazione.nome} <br />
-    <strong>Tipologia:</strong> {segnalazione.tipologia} <br />
-    <strong>Descrizione:</strong> {segnalazione.descrizione} <br />
-    <button onClick={() => handleDeleteSegnalazione(segnalazione._id)}>Cancella</button>
-    <button onClick={() => handleEditSegnalazione(segnalazione)}>Modifica</button>
-    {editingSegnalazione === segnalazione._id && (
-  <div>
-    <label>
-      Titolo:
-      <input
-        type="text"
-        value={editedNome}
-        onChange={(e) => setEditedNome(e.target.value)}
-      />
-    </label>
-    <br />
-    <label>
-      Tipologia:
-      <input
-        type="text"
-        value={editedTipologia}
-        onChange={(e) => setEditedTipologia(e.target.value)}
-      />
-    </label>
-    <br />
-    <label>
-      Descrizione:
-      <textarea
-        value={editedDescrizione}
-        onChange={(e) => setEditedDescrizione(e.target.value)}
-      />
-    </label>
-    <br />
-    <button onClick={handleSaveEdit}>Salva Modifiche</button>
-    <button onClick={() => setEditingSegnalazione(null)}>Annulla</button>
-  </div>
-)}
+        <label>
+            Tipologia:
+            <input type="text" class="input-field" value={tipologia} onChange={(e) => setTipologia(e.target.value)} />
+        </label>
 
-    <hr />
-  </li>
-))}
-        </ul>
-      </div>
+        <label>
+            Descrizione:
+            <textarea class="textarea-field" value={descrizione} onChange={(e) => setDescrizione(e.target.value)} />
+        </label>
+
+        <button class="submit-btn" onClick={handleInsertSegnalazione}>Inserisci Segnalazione</button>
     </div>
+
+    <div class="user-reports">
+        <h3>Le tue segnalazioni</h3>
+        <ul class="report-list">
+            {segnalazioni.map((segnalazione, index) => (
+                <li key={index} class="report-item">
+                    <div class="report-info">
+                    <strong>Nome:</strong> {segnalazione.nome} <br />
+                    <strong>Tipologia:</strong> {segnalazione.tipologia} <br />
+                    <strong>Descrizione:</strong> {segnalazione.descrizione} <br />
+                </div>
+                <div class="report-actions">
+                    <button class="edit-btn" onClick={() => handleEditSegnalazione(segnalazione)}>Modifica</button>
+                    <button class="delete-btn" onClick={() => handleDeleteSegnalazione(segnalazione._id)}>Cancella</button>
+                </div>
+
+                    {editingSegnalazione === segnalazione._id && (
+                        <div class="edit-form">
+                            <label>
+                                Titolo:
+                                <input type="text" class="input-field" value={editedNome} onChange={(e) => setEditedNome(e.target.value)} />
+                            </label>
+
+                            <label>
+                                Tipologia:
+                                <input type="text" class="input-field" value={editedTipologia} onChange={(e) => setEditedTipologia(e.target.value)} />
+                            </label>
+
+                            <label>
+                                Descrizione:
+                                <textarea class="textarea-field" value={editedDescrizione} onChange={(e) => setEditedDescrizione(e.target.value)} />
+                            </label>
+
+                            <button class="save-btn" onClick={handleSaveEdit}>Salva Modifiche</button>
+                            <button class="cancel-btn" onClick={() => setEditingSegnalazione(null)}>Annulla</button>
+                        </div>
+                    )}
+
+                    
+                </li>
+            ))}
+        </ul>
+    </div>
+</div>
+
   );
 }
 

@@ -94,5 +94,114 @@ a:hover::before {
   transform-origin: left;
   transform: scaleX(1);
 }
+.container {
+  width: 80%;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+
+.form-group, .edit-form {
+  margin-bottom: 20px;
+}
+
+.input-field, .textarea-field {
+  width: 100%;
+  padding: 8px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.textarea-field {
+  height: 100px;
+}
+
+button {
+  padding: 10px 15px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.logout-btn {
+  background-color: #f44336;
+  color: white;
+  padding: 5px 5px;
+  margin-right: 5px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+
+}
+
+.submit-btn {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.edit-btn, .save-btn {
+  background-color: #008CBA;
+  color: white;
+}
+
+.delete-btn, .cancel-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+.user-reports {
+  margin-top: 30px;
+}
+
+.report-item {
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+h1, h3 {
+  color: #333;
+}
+.report-list {
+  list-style: none;
+  padding: 0;
+}
+
+.report-item {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.report-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.report-info {
+  flex-grow: 1;
+}
+
+.edit-btn, .delete-btn {
+  margin-left: 10px;
+}
+
+.report-actions {
+  display: flex;
+  align-items: center;
+}
+
+
+.head-info{
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
 
 
