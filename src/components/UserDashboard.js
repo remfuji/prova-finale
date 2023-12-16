@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 import { useNavigate } from 'react-router-dom';
-import { GoogleMap, LoadScript } from "@react-google-maps/api";
+
 
 function App() {
   const [username, setUsername] = useState('');
@@ -13,6 +13,7 @@ function App() {
   const [editingSegnalazione, setEditingSegnalazione] = useState(null);
   const [editedNome, setEditedNome] = useState('');
   const [editedTipologia, setEditedTipologia] = useState('');
+  const [editedData, setEditedData] = useState('');
   const [editedDescrizione, setEditedDescrizione] = useState('');
   const [data, setData] = useState('');
   const navigate = useNavigate();
@@ -33,33 +34,11 @@ function App() {
     }
   }, [navigate]);
 
-  const MapComponent = () => {
-     const mapOptions = {
-    zoom: 8,
-    center: { lat: -34.397, lng: 150.644 }, // Usa una posizione di default
-  };
-  const handleMapClick = (e) => {
-    console.log(e.latLng.lat(), e.latLng.lng());
-    // Aggiorna lo stato dell'app con le nuove coordinate
-  };
-    return (
-      <LoadScript
-        googleMapsApiKey="AIzaSyCViBKLB3vynY5iNX-sceCi2oKI2IJ35pQ"
-      >
-        <GoogleMap
-           mapContainerStyle={{ width: '400px', height: '400px' }}
-           options={mapOptions}
-           onClick={handleMapClick}
-        >
-          {/* Marcatori e altre entità della mappa qui */}
-        </GoogleMap>
-      </LoadScript>
-    );
-  };
+
 
   const handleInsertSegnalazione = async () => {
     try {
-      if (!nome || !tipologia || !descrizione) {
+      if (!nome || !tipologia || !descrizione || !data) {
         alert("Per favore, riempi tutti i campi prima di inserire la segnalazione.");
         return;
       }
@@ -68,6 +47,7 @@ function App() {
         nome,
         tipologia,
         descrizione,
+        data,
       });
 
       if (response.status === 200) {
@@ -96,6 +76,7 @@ function App() {
     setEditedNome(segnalazione.nome);
     setEditedTipologia(segnalazione.tipologia);
     setEditedDescrizione(segnalazione.descrizione);
+    setEditedData(segnalazione.data);
   };
 
   const handleDeleteSegnalazione = async (segnalazioneId) => {
@@ -117,7 +98,7 @@ function App() {
   const handleSaveEdit = async () => {
     try {
 
-      if (!editedNome || !editedTipologia || !editedDescrizione) {
+      if (!editedNome || !editedTipologia || !editedDescrizione ||!data) {
         alert("Per favore, riempi tutti i campi prima di salvare le modifiche.");
         return;
       }
@@ -125,7 +106,8 @@ function App() {
       const response = await axios.put(`http://localhost:3001/update-segnalazione/${editingSegnalazione}`, {
         nome: editedNome,
         tipologia: editedTipologia,
-        descrizione: editedDescrizione
+        descrizione: editedDescrizione,
+        data: editedData,
       });
 
       if (response.status === 200) {
@@ -133,7 +115,7 @@ function App() {
 
         setSegnalazioni(segnalazioni.map(segnalazione => {
           if (segnalazione._id === editingSegnalazione) {
-            return { ...segnalazione, nome: editedNome, tipologia: editedTipologia, descrizione: editedDescrizione };
+            return { ...segnalazione, nome: editedNome, tipologia: editedTipologia, descrizione: editedDescrizione, data: data };
           }
           return segnalazione;
         }));
@@ -142,6 +124,7 @@ function App() {
         setEditedNome('');
         setEditedTipologia('');
         setEditedDescrizione('');
+        setData('');
       } else {
         console.log('Errore durante l\'aggiornamento della segnalazione');
       }
@@ -174,13 +157,13 @@ function App() {
 
         <label>
           Tipologia:
-          
-          <select name="nome_del_menu" value={tipologia}>
-            <option value="opzione1" onChange={(e) => setTipologia(e.target.value)}>Rifiuti</option>
-            <option value="opzione2" onChange={(e) => setTipologia(e.target.value)}>Incendi</option>
-            <option value="opzione3" onChange={(e) => setTipologia(e.target.value)}>Opzione 3</option>
+          <input type="text" class="input-field" value={tipologia} onChange={(e) => setTipologia(e.target.value)} />
+          {/* <select name="tipologia" value={tipologia}>
+            <option value={tipologia} onChange={(e) => setTipologia(e.target.value)}>Rifiuti</option>
+            <option value={tipologia} onChange={(e) => setTipologia(e.target.value)}>Incendi</option>
+            <option value={tipologia} onChange={(e) => setTipologia(e.target.value)}>Opzione 3</option>
             
-          </select>
+          </select> */}
         </label>
 
         <label>
@@ -191,7 +174,7 @@ function App() {
     Data:
     <input type="date" class="input-field" value={data} onChange={(e) => setData(e.target.value)} />
   </label>
-    <MapComponent />
+   
         <button class="submit-btn" onClick={handleInsertSegnalazione}>Inserisci Segnalazione</button>
       </div>
 
@@ -204,6 +187,7 @@ function App() {
                 <strong>Nome:</strong> {segnalazione.nome} <br />
                 <strong>Tipologia:</strong> {segnalazione.tipologia} <br />
                 <strong>Descrizione:</strong> {segnalazione.descrizione} <br />
+                <strong>Data:</strong> {segnalazione.data} <br />
               </div>
               <div class="report-actions">
                 <button class="edit-btn" onClick={() => handleEditSegnalazione(segnalazione)}>Modifica</button>
@@ -225,6 +209,10 @@ function App() {
                   <label>
                     Descrizione:
                     <textarea class="textarea-field" value={editedDescrizione} onChange={(e) => setEditedDescrizione(e.target.value)} />
+                  </label>
+                  <label>
+                    Data:
+                    <input type="date" class="input-field" value={editedData} onChange={(e) => setEditedData(e.target.value)} />
                   </label>
 
                   <button class="save-btn" onClick={handleSaveEdit}>Salva Modifiche</button>

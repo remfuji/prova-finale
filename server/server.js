@@ -21,6 +21,7 @@ mongoose.connect(dbURI)
       nome: String,
       tipologia: String,
       descrizione: String,
+      data: String,
     }],
   });
   
@@ -107,7 +108,7 @@ app.get('/get-user-details', async (req, res) => {
   }
 });
 app.post('/insert-segnalazione', async (req, res) => {
-  const { username, nome, tipologia, descrizione } = req.body;
+  const { username, nome, tipologia, descrizione, data } = req.body;
 
   try {
     // Cerca l'utente nel database MongoDB
@@ -119,6 +120,7 @@ app.post('/insert-segnalazione', async (req, res) => {
         nome,
         tipologia,
         descrizione,
+        data
       };
 
       // Aggiungi la nuova segnalazione all'array segnalazioni dell'utente
@@ -187,7 +189,7 @@ app.delete('/delete-segnalazione/:id', async (req, res) => {
 });
 app.put('/update-segnalazione/:id', async (req, res) => {
   const { id } = req.params;
-  const { nome, tipologia, descrizione } = req.body;
+  const { nome, tipologia, descrizione, data } = req.body;
 
   try {
     await User.updateOne(
@@ -196,7 +198,8 @@ app.put('/update-segnalazione/:id', async (req, res) => {
         "$set": {
           "segnalazioni.$.nome": nome,
           "segnalazioni.$.tipologia": tipologia,
-          "segnalazioni.$.descrizione": descrizione
+          "segnalazioni.$.descrizione": descrizione,
+          "segnalazioni.$.data": data,
         }
       }
     );
