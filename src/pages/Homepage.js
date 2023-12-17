@@ -4,8 +4,6 @@ import Main from "../components/Main";
 import Footer from "../components/Footer";
 import Login from "../components/Login";
 import Registrati from "../components/Registrati";
-import Contatti from "../components/Contatti";
-import Statistiche from "../components/Statistiche";
 import Segnalazioni from "../components/Segnalazioni";
 import UserDashboard from "../components/UserDashboard";
 
@@ -28,8 +26,6 @@ function HomePage() {
             <Route path="/login" element={<Login />} />
             <Route path="/registrati" element={<Registrati />} />
             <Route path="/segnalazioni" element={<Segnalazioni />} />
-            <Route path="/statistiche" element={<Statistiche />} />
-            <Route path="/contatti" element={<Contatti />} />
             <Route path="/user-dashboard" element={<UserDashboard />} />
             
           </Routes>

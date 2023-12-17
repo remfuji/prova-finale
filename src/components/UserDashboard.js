@@ -158,12 +158,6 @@ function App() {
         <label>
           Tipologia:
           <input type="text" class="input-field" value={tipologia} onChange={(e) => setTipologia(e.target.value)} />
-          {/* <select name="tipologia" value={tipologia}>
-            <option value={tipologia} onChange={(e) => setTipologia(e.target.value)}>Rifiuti</option>
-            <option value={tipologia} onChange={(e) => setTipologia(e.target.value)}>Incendi</option>
-            <option value={tipologia} onChange={(e) => setTipologia(e.target.value)}>Opzione 3</option>
-            
-          </select> */}
         </label>
 
         <label>
@@ -178,45 +172,45 @@ function App() {
         <button class="submit-btn" onClick={handleInsertSegnalazione}>Inserisci Segnalazione</button>
       </div>
 
-      <div class="user-reports">
+      <div className="user-reports">
         <h3>Le tue segnalazioni</h3>
-        <ul class="report-list">
+        <ul className="report-list">
           {segnalazioni.map((segnalazione, index) => (
             <li key={index} class="report-item">
-              <div class="report-info">
+              <div className="report-info">
                 <strong>Nome:</strong> {segnalazione.nome} <br />
                 <strong>Tipologia:</strong> {segnalazione.tipologia} <br />
                 <strong>Descrizione:</strong> {segnalazione.descrizione} <br />
                 <strong>Data:</strong> {segnalazione.data} <br />
               </div>
-              <div class="report-actions">
-                <button class="edit-btn" onClick={() => handleEditSegnalazione(segnalazione)}>Modifica</button>
-                <button class="delete-btn" onClick={() => handleDeleteSegnalazione(segnalazione._id)}>Cancella</button>
+              <div className="report-actions">
+                <button className="edit-btn" onClick={() => handleEditSegnalazione(segnalazione)}>Modifica</button>
+                <button className="delete-btn" onClick={() => handleDeleteSegnalazione(segnalazione._id)}>Cancella</button>
               </div>
 
               {editingSegnalazione === segnalazione._id && (
                 <div class="edit-form">
                   <label>
                     Titolo:
-                    <input type="text" class="input-field" value={editedNome} onChange={(e) => setEditedNome(e.target.value)} />
+                    <input type="text" className="input-field" value={editedNome} onChange={(e) => setEditedNome(e.target.value)} />
                   </label>
 
                   <label>
                     Tipologia:
-                    <input type="text" class="input-field" value={editedTipologia} onChange={(e) => setEditedTipologia(e.target.value)} />
+                    <input type="text" className="input-field" value={editedTipologia} onChange={(e) => setEditedTipologia(e.target.value)} />
                   </label>
 
                   <label>
                     Descrizione:
-                    <textarea class="textarea-field" value={editedDescrizione} onChange={(e) => setEditedDescrizione(e.target.value)} />
+                    <textarea className="textarea-field" value={editedDescrizione} onChange={(e) => setEditedDescrizione(e.target.value)} />
                   </label>
                   <label>
                     Data:
-                    <input type="date" class="input-field" value={editedData} onChange={(e) => setEditedData(e.target.value)} />
+                    <input type="date" className="input-field" value={editedData} onChange={(e) => setEditedData(e.target.value)} />
                   </label>
 
-                  <button class="save-btn" onClick={handleSaveEdit}>Salva Modifiche</button>
-                  <button class="cancel-btn" onClick={() => setEditingSegnalazione(null)}>Annulla</button>
+                  <button className="save-btn" onClick={handleSaveEdit}>Salva Modifiche</button>
+                  <button className="cancel-btn" onClick={() => setEditingSegnalazione(null)}>Annulla</button>
                 </div>
               )}
 

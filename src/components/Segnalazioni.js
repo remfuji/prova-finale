@@ -22,12 +22,12 @@ function Segnalazioni() {
   }, []);
 
   return (
-    <div class="container">
+    <div className="container">
       <h2>Segnalazioni</h2>
-      <ul class="report-list">
+      <ul className="report-list">
         {segnalazioni.map((segnalazione, index) => (
-          <li key={index} class="report-item">
-            <div class="report-info">
+          <li key={index} className="report-item">
+            <div className="report-info">
             <strong>Nome:</strong> {segnalazione.nome}<br />
             <strong>Tipologia:</strong> {segnalazione.tipologia}<br />
             <strong>Descrizione:</strong> {segnalazione.descrizione}<br />

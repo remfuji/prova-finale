@@ -91,18 +91,14 @@ app.get('/get-user-details', async (req, res) => {
   const { username } = req.query;
 
   try {
-    // Cerca l'utente nel database MongoDB e restituisci i dettagli
     const user = await User.findOne({ username });
 
     if (user) {
-      // Trovato l'utente, restituisci i dettagli
       res.status(200).json({ userDetails: { username: user.username } });
     } else {
-      // Utente non trovato
       res.status(404).json({ message: 'Utente non trovato' });
     }
   } catch (error) {
-    // Errore durante la ricerca dell'utente nel database
     console.error('Errore durante il recupero dei dettagli dell\'utente:', error);
     res.status(500).json({ message: 'Errore durante il recupero dei dettagli dell\'utente. Si prega di riprovare più tardi.' });
   }
@@ -111,25 +107,19 @@ app.post('/insert-segnalazione', async (req, res) => {
   const { username, nome, tipologia, descrizione, data } = req.body;
 
   try {
-    // Cerca l'utente nel database MongoDB
     const user = await User.findOne({ username });
-
     if (user) {
-      // Crea una nuova segnalazione
       const newSegnalazione = {
         nome,
         tipologia,
         descrizione,
         data
       };
-
-      // Aggiungi la nuova segnalazione all'array segnalazioni dell'utente
       user.segnalazioni.push(newSegnalazione);
       await user.save();
 
       res.status(200).json({ message: 'Segnalazione inserita con successo e associata all\'utente' });
     } else {
-      // Utente non trovato
       res.status(404).json({ message: 'Utente non trovato' });
     }
   } catch (error) {
@@ -156,11 +146,8 @@ app.get('/get-segnalazioni', async (req, res) => {
 });
 app.get('/all-segnalazioni', async (req, res) => {
   try {
-    // Cerca tutti gli utenti e restituisci solo le loro segnalazioni
     const users = await User.find().select('segnalazioni -_id');
     let allSegnalazioni = [];
-
-    // Estrai tutte le segnalazioni da ogni utente
     users.forEach(user => {
       allSegnalazioni = allSegnalazioni.concat(user.segnalazioni);
     });
@@ -174,7 +161,6 @@ app.get('/all-segnalazioni', async (req, res) => {
 
 app.delete('/delete-segnalazione/:id', async (req, res) => {
   const { id } = req.params;
-
   try {
     await User.updateOne(
       {},
@@ -208,11 +194,4 @@ app.put('/update-segnalazione/:id', async (req, res) => {
     console.error('Errore durante l\'aggiornamento della segnalazione:', error);
     res.status(500).json({ message: 'Errore durante l\'aggiornamento della segnalazione.' });
   }
-});
-
-
-
-
-
-
-
+})

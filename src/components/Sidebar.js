@@ -11,7 +11,7 @@ function Sidebar({ userLoggedIn }) {
 
   useEffect(() => {
     setIsLoggedIn(localStorage.getItem('isLoggedIn') === 'true');
-  }, [isLoggedIn]); // Added isLoggedIn as a dependency
+  }, [isLoggedIn]);
   return (
     <aside>
       <nav>
@@ -20,8 +20,6 @@ function Sidebar({ userLoggedIn }) {
           <li><Link to="/login">Login</Link></li>
           <li><Link to="/registrati">Registrati</Link></li>
           <li><Link to="/segnalazioni">Segnalazioni</Link></li>
-          <li><Link to="/statistiche">Statistiche</Link></li>
-          <li><Link to="/contatti">Contatti</Link></li>
           <li><Link to="/user-dashboard">User Dashboard</Link></li>
         </ul>
       </nav>

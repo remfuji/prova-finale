@@ -26,7 +26,7 @@ function Registrazione() {
       if (response.ok) {
         const result = await response.json();
         setUserExists(result.message === 'Utente già esistente');
-        setErrorMessage(''); // Resetta l'eventuale messaggio di errore
+        setErrorMessage('');
       } else {
         console.error('Errore durante la verifica dell\'utente');
       }
@@ -77,7 +77,7 @@ function Registrazione() {
       {registrationSuccess ? (
         <p>Registrazione avvenuta con successo!</p>
       ) : (
-        <form onSubmit={handleSubmit}>
+        <form className='login-form' onSubmit={handleSubmit}>
           <label>
             Username:
             <input type="text" value={username} onChange={handleUsernameChange} />
